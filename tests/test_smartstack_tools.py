@@ -255,8 +255,8 @@ def test_get_replication_for_instance(
     system_paasta_config,
 ):
     mock_mesos_slaves = [
-        {'hostname': 'host1', 'attributes': {'region': 'fake_region1'}},
-        {'hostname': 'host2', 'attributes': {'region': 'fake_region1'}},
+        {'hostname': 'host1', 'attributes': {'region': 'fake_region1', 'pool': 'default'}},
+        {'hostname': 'host2', 'attributes': {'region': 'fake_region1', 'pool': 'default'}},
     ]
     instance_config = mock.Mock(service='fake_service', instance='fake_instance')
     instance_config.get_monitoring_blacklist.return_value = []
