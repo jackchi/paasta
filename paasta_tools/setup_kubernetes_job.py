@@ -23,6 +23,9 @@ Command line options:
 import argparse
 import logging
 import sys
+from typing import List
+from typing import Optional
+from typing import Tuple
 
 from paasta_tools.kubernetes_tools import create_deployment
 from paasta_tools.kubernetes_tools import ensure_paasta_namespace
@@ -83,7 +86,11 @@ def main() -> None:
     sys.exit(1 if num_failed_deployments else 0)
 
 
-def setup_kube_deployments(kube_client, service_instances, soa_dir=DEFAULT_SOA_DIR):
+def setup_kube_deployments(
+    kube_client: KubeClient,
+    service_instances: List[str],
+    soa_dir: str=DEFAULT_SOA_DIR,
+) -> int:
     num_failed_deployments = 0
     if service_instances:
         deployments = list_all_deployments(kube_client)
@@ -105,7 +112,13 @@ def setup_kube_deployments(kube_client, service_instances, soa_dir=DEFAULT_SOA_D
     return num_failed_deployments
 
 
-def reconcile_kubernetes_deployment(kube_client, service, instance, kube_deployments, soa_dir):
+def reconcile_kubernetes_deployment(
+    kube_client: KubeClient,
+    service: str,
+    instance: str,
+    kube_deployments: List[KubeDeployment],
+    soa_dir: str,
+) -> Tuple[int, Optional[int]]:
     try:
         service_instance_config = load_kubernetes_service_config_no_cache(
             service,
